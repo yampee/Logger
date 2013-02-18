@@ -27,6 +27,11 @@ class Yampee_Log_Logger
 	protected $currentScriptLog;
 
 	/**
+	 * @var boolean
+	 */
+	protected $store = true;
+
+	/**
 	 * @param Yampee_Log_Storage_Interface $storage
 	 */
 	public function __construct(Yampee_Log_Storage_Interface $storage)
@@ -48,6 +53,10 @@ class Yampee_Log_Logger
 	 */
 	public function store()
 	{
+		if (! $this->store) {
+			return;
+		}
+
 		$this->storage->store($this->currentScriptLog);
 	}
 
@@ -57,7 +66,7 @@ class Yampee_Log_Logger
 	 */
 	public function error($message)
 	{
-		$this->currentScriptLog[] = '[Error]		'.$message;
+		$this->currentScriptLog[] = '[Error] '.$message;
 
 		return $this;
 	}
@@ -68,7 +77,7 @@ class Yampee_Log_Logger
 	 */
 	public function emergency($message)
 	{
-		$this->currentScriptLog[] = '[EMERGENCY]	'.$message;
+		$this->currentScriptLog[] = '[EMERGENCY] '.$message;
 
 		return $this;
 	}
@@ -79,7 +88,7 @@ class Yampee_Log_Logger
 	 */
 	public function critical($message)
 	{
-		$this->currentScriptLog[] = '[Critical]	'.$message;
+		$this->currentScriptLog[] = '[Critical] '.$message;
 
 		return $this;
 	}
@@ -90,7 +99,7 @@ class Yampee_Log_Logger
 	 */
 	public function warning($message)
 	{
-		$this->currentScriptLog[] = '[Warning]		'.$message;
+		$this->currentScriptLog[] = '[Warning] '.$message;
 
 		return $this;
 	}
@@ -101,7 +110,7 @@ class Yampee_Log_Logger
 	 */
 	public function alert($message)
 	{
-		$this->currentScriptLog[] = '[Alert]		'.$message;
+		$this->currentScriptLog[] = '[Alert] '.$message;
 
 		return $this;
 	}
@@ -112,7 +121,7 @@ class Yampee_Log_Logger
 	 */
 	public function notice($message)
 	{
-		$this->currentScriptLog[] = '[Notice]		'.$message;
+		$this->currentScriptLog[] = '[Notice] '.$message;
 
 		return $this;
 	}
@@ -123,7 +132,7 @@ class Yampee_Log_Logger
 	 */
 	public function info($message)
 	{
-		$this->currentScriptLog[] = '[Info]		'.$message;
+		$this->currentScriptLog[] = '[Info] '.$message;
 
 		return $this;
 	}
@@ -134,9 +143,29 @@ class Yampee_Log_Logger
 	 */
 	public function debug($message)
 	{
-		$this->currentScriptLog[] = '[Debug]		'.$message;
+		$this->currentScriptLog[] = '[Debug] '.$message;
 
 		return $this;
+	}
+
+	/**
+	 * CLear the current script logs
+	 *
+	 * @return Yampee_Log_Logger
+	 */
+	public function clearCurrentScriptLog()
+	{
+		$this->currentScriptLog = array();
+
+		return $this;
+	}
+
+	/**
+	 * @return Yampee_Log_Storage_Interface
+	 */
+	public function getStorage()
+	{
+		return $this->storage;
 	}
 
 	/**
@@ -156,5 +185,25 @@ class Yampee_Log_Logger
 	public function getCurrentScriptLog()
 	{
 		return $this->currentScriptLog;
+	}
+
+	/**
+	 * @return Yampee_Log_Logger
+	 */
+	public function enable()
+	{
+		$this->store = true;
+
+		return $this;
+	}
+
+	/**
+	 * @return Yampee_Log_Logger
+	 */
+	public function disable()
+	{
+		$this->store = false;
+
+		return $this;
 	}
 }
